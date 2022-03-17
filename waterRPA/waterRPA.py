@@ -12,9 +12,9 @@ def mouseClick(clickTimes,lOrR,img,reTry):
         while True:
             location=pyautogui.locateCenterOnScreen(img,confidence=0.9)
             if location is not None:
-                pyautogui.click(location.x,location.y,clicks=clickTimes,interval=0.2,duration=0.2,button=lOrR)
+                pyautogui.click(location.x,location.y,clicks=clickTimes,interval=0.2,duration=0.2,)
                 break
-            print("未找到匹配图片,0.1秒后重试")
+            print("未找到匹配图片,0.2秒后重试")
             time.sleep(0.1)
     elif reTry == -1:
         while True:
@@ -86,6 +86,7 @@ def dataCheck(sheet1):
 
 #任务
 def mainWork(img):
+    print (img)
     i = 1
     while i < sheet1.nrows:
         #取本行指令的操作类型
