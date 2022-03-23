@@ -9,13 +9,15 @@ import os
 
 #打开网站并返回到正常状态
 def openweb(url):
+    print('打开网站',url)
     webbrowser.open(url, new=0, autoraise=True)
-    time.sleep(10)
+    time.sleep(15)
     pyautogui.hotkey('ctrl', '0')
 
     
-
+#数据检查
 def dataCheck(sheet1):
+    print('数据检查')
     checkCmd = True
     end=['01.png','02.png','03.png','04.png','05.png']
     #行数检查
@@ -41,10 +43,10 @@ def dataCheck(sheet1):
         i += 1
     return checkCmd
 
-def loginweb(img1,img2,usrId,Paswd):
-    print(img,usrId,Paswd,F)
-    inpubox(img1,usrId)#输入用户名
-    inpubox(img2,Padwd)#输入密码
+def loginweb(img1,img2,usrId,Paswd):    
+    print("登录网站")
+    inputbox(img1,usrId)#输入用户名
+    inputbox(img2,Paswd)#输入密码
     pyautogui.press('Enter')
     time.sleep(5)
     
@@ -87,19 +89,25 @@ if __name__ == '__main__':
             location=pyautogui.locateOnScreen(img)
             if location is None:  #登录网站
                 img= sheet1.row(i)[0].value+"05.png" #验证码
-                if sheet1.row(i)[2].value==0:
+                if sheet1.row(i)[2].value !=0:
                     Verify_Code(img)
+                    print("输入验证码",Verify_Code)
                     inputbox(img, Verify_Code)#输入验证码
                 img1= sheet1.row(i)[0].value+"01.png" #用户名图片
                 img2= sheet1.row(i)[0].value+"02.png" #密码图片
                 usrId= sheet1.row(i)[3].value       #用户名图片
                 Paswd= sheet1.row(i)[4].value        #密码图片
-                loginweb(img,usrId,Paswd)           #登录
+                loginweb(img1,img2,usrId,Paswd)           #登录
+            else:
+                print("已经登录")
             img= sheet1.row(i)[0].value+"04.png" #打卡验证
             location=pyautogui.locateCenterOnScreen(img)
             if location is not None:  #打卡
+                print("打卡")
                 pyautogui.click(location.x,location.y,1,interval=0.2,duration=0.2,)
                 pyautogui.hotkey('ctrl', 'r')
+            else:
+                print("已经打卡")
             i += 1
         checkCmd=False
     else:
