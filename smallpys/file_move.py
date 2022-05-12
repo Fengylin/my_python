@@ -3,8 +3,8 @@
 # 并显示于屏幕上，输入其相应的字母或数字，程序会自动将其图片文件放入
 # 相应的文件夹中
 
-import os,time
-import shutil,pyautogui
+import os,time,msvcrt
+import shutil,pyautogui,sys
 from PIL import Image
 
 def tif_move(img,pi,po):
@@ -19,13 +19,21 @@ def tif_move(img,pi,po):
     pyautogui.hotkey('alt','tab')
     F = True
     while F:
-        letter = input ("请输入相应的字符》》：")
+        print ("请输入相应的字符》》：",end = '')
+        c = msvcrt.getche()
+        letter = c.decode('utf-8')
+        print (letter)
         if letter in iconset:
             dst = po + letter + '/' + img
             shutil.move (src,dst)
             F = False            
-        else:
-            print("输入有误，请重新输入!!!")
+        else :
+            if letter == str(0):
+                print('退出')
+                time.sleep(1)
+                sys.exit()
+            else:
+                print("输入有误，请重新输入!!!")
             
 
 
