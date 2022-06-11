@@ -6,10 +6,8 @@ from PIL import Image,ImageDraw
 def ez_map(thresold):
     res=[]
     for i in range(256):
-        if i<thresold:
-            res.append(1)
-        else:
-            res.append(0)    
+        if i<thresold: res.append(1)
+        else: res.append(0)    
     return res 
 
 
@@ -30,8 +28,7 @@ def find_letters(im2):                               # 形成单字符图像分�
     for y in range(im2.size[0]): # slice across，
         for x in range(im2.size[1]): # slice down
             pix = im2.getpixel((y,x))
-            if pix != 0:
-                inletter = True                
+            if pix != 0: inletter = True                
 
         if foundletter == False and inletter == True:
             foundletter = True
@@ -43,8 +40,7 @@ def find_letters(im2):                               # 形成单字符图像分�
             letters.append((start,end)) 
 
         inletter=False
-    if start > end :
-        letters.append ((start,y))
+    if start > end : letters.append ((start,y))
     return letters
 
 
@@ -54,20 +50,17 @@ def black_points (im):                                # 统计图像中的黑点
     for x in range(im.size[0]): 
         for y in range(im.size[1]):
             pix = im.getpixel((x,y))
-            if pix !=0:
-                dict [(x,y)] = 0
+            if pix !=0: dict [(x,y)] = 0
     return dict
 
 def find(xy,wh, letters,num,sub=[]):
     x,y = xy[0],xy[1]
     w,h = wh[0],wh[1]
-    if (x,y) not in letters:return
-    tog = letters[(x,y)]
-    if tog == num:
-        return
+    if xy not in letters:return
+    if letters[xy] == num:return
     else:
-        sub.append((x,y))
-        letters[(x,y)] = num
+        sub.append(xy)
+        letters[xy] = num
 
     if x+1 <  w: find((x+1,y),wh,letters,num,sub)
     if x-1 > -1: find((x-1,y),wh,letters,num,sub)
@@ -80,20 +73,17 @@ def denoise(img):
     all_str = []            # 全部子串
     w,h =img.size
     for point in blp:
-        v = blp [point]
         sub_str =[]
-        if v != 0:
+        if blp [point] != 0:
             continue
         find(point,img.size,blp,num,sub_str)
         all_str.append(sub_str)
         num += 1
     all_str.sort(key=len)
-    l = len(all_str)
-    print ("子串数目：{:4}".format(l))
+    print ("子串数目：{:4}".format(len(all_str)))
     for sub_str in all_str:
         if len(sub_str) >8 :continue
-        for point in sub_str:
-            img.putpixel(point,0)
+        for point in sub_str: img.putpixel(point,0)
     return
 
 if __name__ == '__main__':
